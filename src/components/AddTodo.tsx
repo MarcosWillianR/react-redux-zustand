@@ -11,7 +11,7 @@ export function AddTodo() {
     event.preventDefault();
     dispatch(add({ newTodo }))
     setNewTodo('');
-  }, []);
+  }, [newTodo]);
 
   return (
     <form onSubmit={handleAddNewTodo}>
