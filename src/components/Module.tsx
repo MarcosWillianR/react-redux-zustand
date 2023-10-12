@@ -3,8 +3,7 @@ import { ChevronDown } from "lucide-react";
 
 import { Lesson } from "./Lesson";
 
-import { play } from '../store/slices/player';
-import { useAppDispatch, useAppSelector } from '../store';
+import { useStore } from '../zustand-store';
 
 interface ModuleProps {
   moduleIndex: number
@@ -13,15 +12,13 @@ interface ModuleProps {
 }
 
 export function Module({ lessonsAmount, title, moduleIndex }: ModuleProps) {
-  const dispatch = useAppDispatch()
-  
-  const lessons = useAppSelector(state => {
-    return state.player.course?.modules[moduleIndex].lessons
-  })
-
-  const { currentLessonIndex, currentModuleIndex } = useAppSelector(state => {
-    const { currentLessonIndex, currentModuleIndex } = state.player
-    return { currentLessonIndex, currentModuleIndex }
+  const { currentLessonIndex, currentModuleIndex, play, lessons } = useStore(store => {
+    return {
+      currentLessonIndex: store.currentLessonIndex,
+      currentModuleIndex: store.currentModuleIndex,
+      lessons: store.course?.modules[moduleIndex].lessons,
+      play: store.play,
+    }
   })
 
   return (
@@ -49,7 +46,7 @@ export function Module({ lessonsAmount, title, moduleIndex }: ModuleProps) {
                 key={id}
                 title={title}
                 duration={duration}
-                onPlay={() => dispatch(play([moduleIndex, lessonIndex]))}
+                onPlay={() => play([moduleIndex, lessonIndex])}
                 isCurrent={isCurrent}
               />
             )
